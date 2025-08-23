@@ -1,0 +1,26 @@
+#container-button {
+  text-align: center;
+}
+
+
+
+.container-alert-message{
+  display: flex;
+  justify-content: center;
+}
+
+#message-alert{
+  position: absolute;
+  margin-top: 1em;
+  height: 50;
+ 
+}
+
+#container-table{
+  margin-top: 5em;
+}
+
+.container-options-table{
+  display: flex;
+  justify-content: space-around;
+}
