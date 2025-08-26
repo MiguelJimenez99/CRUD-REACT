@@ -55,7 +55,7 @@ const Navbar = ({ search, setSearch, handleSubmit }: Promps) => {
             <form className="d-flex" role="search" onSubmit={handleSubmit}>
               <input
                 className="form-control me-2"
-                type="search"
+                type="number"
                 placeholder="Search"
                 aria-label="Search"
                 value={search}
