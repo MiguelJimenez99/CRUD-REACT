@@ -39,7 +39,6 @@ const EditarUsuario = ({ user }: Props) => {
 
       if (res.status === 200) {
         alert(data.message);
-        
       } else {
         alert(data.message);
       }

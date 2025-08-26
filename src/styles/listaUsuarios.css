@@ -2,25 +2,36 @@
   text-align: center;
 }
 
-
-
-.container-alert-message{
+.container-alert-message {
   display: flex;
   justify-content: center;
 }
 
-#message-alert{
+#message-alert {
   position: absolute;
   margin-top: 1em;
   height: 50;
- 
 }
 
-#container-table{
+#loading-state {
   margin-top: 5em;
 }
 
-.container-options-table{
+#container-table {
+  margin-top: 5em;
+}
+
+#check-list {
+  display: flex;
+  justify-content: center;
+}
+
+.td-check-box {
+  display: flex;
+  justify-content: space-around;
+}
+
+.container-options-table {
   display: flex;
   justify-content: space-around;
 }

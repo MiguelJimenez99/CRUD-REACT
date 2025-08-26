@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+interface Promps {
+  search: string;
+  setSearch: (value: string) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+}
+
+const Navbar = ({ search, setSearch, handleSubmit }: Promps) => {
   const navigate = useNavigate();
+
   return (
     <>
-      <nav className="navbar bg-dark navbar-expand-lg  bg-body-tertiary" data-bs-theme="dark">
+      <nav
+        className="navbar bg-dark navbar-expand-lg  bg-body-tertiary"
+        data-bs-theme="dark"
+      >
         <div className="container">
           <a className="navbar-brand" href="#" onClick={() => navigate("/")}>
             Gestor de Usuarios
@@ -42,6 +52,19 @@ const Navbar = () => {
                 </a>
               </li>
             </ul>
+            <form className="d-flex" role="search" onSubmit={handleSubmit}>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button className="btn btn-outline-success" type="submit">
+                Search
+              </button>
+            </form>
           </div>
         </div>
       </nav>

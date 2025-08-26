@@ -11,6 +11,7 @@ interface User {
   name: string;
   lastname: string;
   email: string;
+  isActive: boolean;
   document: number;
 }
 
@@ -19,6 +20,7 @@ interface Respose {
   data: User[];
 }
 const ListaUsuarios = () => {
+  const [search, setSearch] = useState("");
   const [userSelect, setUserSelect] = useState<User | null>(null);
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
@@ -33,7 +35,7 @@ const ListaUsuarios = () => {
       setLoading(true);
       const res = await fetch(Url);
       const data: Respose = await res.json();
-    
+
       if (res.status === 200) {
         setUsers(data.data);
         setMessage(data.message);
@@ -63,13 +65,66 @@ const ListaUsuarios = () => {
 
       if (res.status === 200) {
         alert(data.message);
-
         setUsers(users.filter((u) => u._id !== id));
       } else {
         alert(data.message);
       }
     } catch (error) {
       setError(error as string);
+    }
+  };
+
+  //funcion para cambiar el estado del usuario [Activo o innactivo]
+  const handlerState = async (id: string) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/editarEstado/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+        setUsers(
+          users.map((user) =>
+            user._id === id ? { ...user, isActive: !user.isActive } : user
+          )
+        );
+        setMessage(data.message);
+      } else {
+        setMessage(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Trae todos los usuarios apenas el input queda vacío
+  useEffect(() => {
+    if (search === "") {
+      fetchUsers();
+    }
+  }, [search]);
+
+  //funcion para buscar un usuario desde la barra de busqueda
+  const searchUserDoc = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/usuario?document=${search}`
+      );
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+        // Si la respuesta es exitosa, actualizo el estado
+        setUsers(Array.isArray(data.data) ? data.data : [data.data]);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -87,7 +142,11 @@ const ListaUsuarios = () => {
   }, []);
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className="text-center" id="loading-state">
+        Cargando...
+      </div>
+    );
   }
 
   if (error) {
@@ -97,7 +156,11 @@ const ListaUsuarios = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        search={search}
+        setSearch={setSearch}
+        handleSubmit={searchUserDoc}
+      />
       <div className="container-list-users">
         <h2 className="text-center">Lista Usuarios</h2>
 
@@ -122,6 +185,7 @@ const ListaUsuarios = () => {
                   <th scope="col">Nombre</th>
                   <th scope="col">Apellido</th>
                   <th scope="col">Email</th>
+                  <th scope="col">Estado</th>
                   <th scope="col">Opciones</th>
                 </tr>
               </thead>
@@ -132,6 +196,16 @@ const ListaUsuarios = () => {
                     <td>{element.name}</td>
                     <td>{element.lastname}</td>
                     <td>{element.email}</td>
+                    <td className="td-check-box">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={element.isActive}
+                        onChange={() => handlerState(element._id)}
+                      />
+
+                      {element.isActive ? <p>Activo</p> : <p>Inactivo</p>}
+                    </td>
                     <td>
                       <div className="container-options-table">
                         <button
@@ -185,6 +259,7 @@ const ListaUsuarios = () => {
                     lastname: userInfo.lastname,
                     document: userInfo.document,
                     email: userInfo.email,
+                    isActive: userInfo.isActive,
                   }
                 : null
             }

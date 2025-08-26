@@ -40,9 +40,11 @@ const AgregarUsuario = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar search="" setSearch={() => {}} handleSubmit={() => {}} />
       <div>
-        <h2 className="text-center" id="title-page">Agregar Usuario</h2>
+        <h2 className="text-center" id="title-page">
+          Agregar Usuario
+        </h2>
 
         <div className="container" id="container-form">
           <form onSubmit={handleForm}>

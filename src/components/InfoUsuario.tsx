@@ -8,8 +8,9 @@ interface Promps {
     lastname: string;
     email: string;
     document: number;
+    isActive: boolean;
   } | null;
-   onClose: () => void;
+  onClose: () => void;
 }
 
 interface Data {
@@ -17,9 +18,10 @@ interface Data {
   lastname: string;
   email: string;
   document: number;
+  isActive: boolean;
 }
 
-const MostrarUsuario = ({ user ,onClose}: Promps) => {
+const MostrarUsuario = ({ user, onClose }: Promps) => {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState("");
 
@@ -46,14 +48,13 @@ const MostrarUsuario = ({ user ,onClose}: Promps) => {
     }
   };
 
- useEffect(() => {
+  useEffect(() => {
     if (user?._id) {
       fetchDataUser();
     } else {
       setData(null);
     }
-  }, [user?._id]); 
-
+  }, [user?._id]);
 
   if (error) {
     return (
@@ -70,7 +71,11 @@ const MostrarUsuario = ({ user ,onClose}: Promps) => {
         {data ? (
           <div className="card mt-3 p-3 shadow">
             <div className="d-flex justify-content-between align-items-center">
-               <button className="btn-close" aria-label="Close" onClick={onClose}></button>
+              <button
+                className="btn-close"
+                aria-label="Close"
+                onClick={onClose}
+              ></button>
             </div>
 
             <ul className="list-group mt-2">
@@ -78,6 +83,9 @@ const MostrarUsuario = ({ user ,onClose}: Promps) => {
               <li className="list-group-item">Apellidos: {data.lastname}</li>
               <li className="list-group-item">Documento: {data.document}</li>
               <li className="list-group-item">Email: {data.email}</li>
+              <li className="list-group-item">
+                Estado: {data.isActive ? "Activo" : "Inactivo"}
+              </li>
             </ul>
           </div>
         ) : (
